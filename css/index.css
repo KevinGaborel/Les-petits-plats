@@ -1,0 +1,139 @@
+body{
+    margin: 0 50px;
+    box-sizing: border-box;
+}
+header{
+    color: #ED6454;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0 25px 0;
+}
+header i, header h1{
+    font-size: 40px;
+    margin: 0;
+}
+
+.search-bar-container{
+    background-color: #E6E6E6;
+    display: flex;
+    justify-content: space-between;
+}
+.search-bar-container #search-bar, .search-bar-container button{
+    border: none;
+    background-color: #E6E6E6;
+    outline: none;
+    padding: 0;
+    height: 3rem;
+}
+.search-bar-container #search-bar{
+    width: 94%;
+    padding-left: 1rem;
+}
+.search-bar-container button{
+    width: 50px;
+    font-size: 25px;
+}
+/* filter part */
+.search-filtres{
+    margin: 20px 0;
+    display: flex;
+}
+
+.ingredients-container, .appareils-container, .ustensiles-container{
+    padding-right: 15px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.ingredients-container{
+    background-color: #3282F7;
+}
+.appareils-container{
+    background-color: #68D9A4;
+}
+.ustensiles-container{
+    background-color: #ED6454;
+}
+
+#ingredients, #appareils, #ustensiles{
+    border: none;
+    outline: none;
+    padding-left: 15px;
+    border-radius: 5px;
+    height: 60px;
+    color: white;
+    font-size: 15px;
+}
+#ingredients::placeholder, #appareils::placeholder, #ustensiles::placeholder{
+    color: white;
+    font-weight: 600;
+}
+.fa-angle-down{
+    color: white;
+}
+
+#ingredients{
+    background-color: #3282F7;
+}
+#appareils{
+    background-color: #68D9A4;
+}
+#ustensiles{
+    background-color: #ED6454;
+}
+
+/* recipes part*/
+.content{
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 40px;
+    column-gap: 40px;
+}
+
+.article-recipe{
+    background-color: #E6E6E6;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% / 3 - 27px);
+    height: 500px;
+    border-radius: 10px;
+}
+
+.factice-img{
+    background-color: #C7BEBE;
+    min-height: 50%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.article-describe{
+    padding: 20px;
+}
+.article-title{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 20px;
+}
+.article-title h2{
+    font-weight: 500;
+    font-size: 20px;
+}
+.article-title i{
+    margin-right: 5px;
+}
+.footer-card{
+    display: flex;
+}
+.footer-card ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 50%;
+}
+.footer-card p{
+    width: 50%;
+    margin: 0;
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les petits plats</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <header>
+        <i class="fa-solid fa-kitchen-set"></i>
+        <h1>Les petits plats</h1>
+    </header>
+
+    <main>
+        <form method="get" class="research">
+            <div class="search-bar-container">
+                <input type="search" name="search-bar" id="search-bar" placeholder="Rechercher une recette">
+                <button type="submit" aria-label="search"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="search-filtres">
+                <div class="ingredients-container">
+                    <input type="search" name="ingredients" id="ingredients" placeholder="Ingrédients">
+                    <i class="fa-solid fa-angle-down"></i>
+                </div>
+                <div class="appareils-container">
+                    <input type="search" name="appareils" id="appareils" placeholder="Appareils">
+                    <i class="fa-solid fa-angle-down"></i>
+                </div>
+                <div class="ustensiles-container">
+                    <input type="search" name="ustensiles" id="ustensiles" placeholder="Ustensiles">
+                    <i class="fa-solid fa-angle-down"></i>
+                </div>
+            </div>
+        </form>
+
+        <div class="content">
+
+        </div>
+
+    </main>
+
+    <script src="/js/factories/indexFactory.js"></script>
+    <script src="/js/index.js"></script>
+    <script src="https://kit.fontawesome.com/8c3f32533e.js" crossorigin="anonymous"></script>
+</body>
+</html>
