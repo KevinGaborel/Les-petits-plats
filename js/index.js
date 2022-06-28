@@ -21,10 +21,17 @@ function displayData(data){
     });
 }
 
+function cleanCard(){
+    const contentElt = document.querySelector('.content');
+
+    while (contentElt.firstChild){
+        contentElt.removeChild(contentElt.firstChild);
+    }
+
+}
+
 async function init() {
     const data = await fetchData();
-    let recipesResult;
-    let recipesFormatage;
 
     const formElt = document.querySelector('.research');
 
@@ -60,8 +67,8 @@ async function init() {
 
                 }).filter(value => value);
 
-                
-            console.log(tabRecipes);
+            cleanCard();
+            displayData(tabRecipes);
         }
 
     });
