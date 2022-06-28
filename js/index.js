@@ -47,18 +47,14 @@ async function init() {
                     const researchName = recipes.name.toLowerCase().includes(entryUser) && recipes;
                         
                     const researchDescription = recipes.description.toLowerCase().includes(entryUser) && recipes;
-                    console.log(researchDescription);
 
                     if (researchIngredient.length > 0){
-                        console.log("merde");
                         return researchIngredient[0];
 
-                    }else if (researchName.length > 0){
-                        console.log('pute');
+                    }else if (researchName){
                         return researchName;
 
-                    } else if (researchDescription.length > 0){
-                        console.log('coucou');
+                    } else if (researchDescription){
                         return researchDescription;
                     }
 
