@@ -70,5 +70,22 @@ function indexFactory(){
         return article;
     }
 
-    return { getCardRecipes };
+    function getTagList(data){
+        
+        const listTags = document.createElement('ul');
+        listTags.classList.add('list-tags');
+
+        for (elt of data){
+            const eltList = document.createElement('li');
+
+            eltList.classList.add('tag');
+            eltList.textContent = elt;
+            listTags.appendChild(eltList);
+        }
+
+        return listTags;
+
+    }
+
+    return { getCardRecipes, getTagList };
 }
