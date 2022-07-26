@@ -269,34 +269,33 @@ async function init() {
         if (e.target.id === 'search-bar' && e.target.value.length > 2){
 
             const entryUser = e.target.value.toLowerCase();
-            tabRecipes = data.map((recipes, index) => 
-                {
+            let tabRecipes = [];
+            
+            for (recipe of data){
+                
+                const researchName = recipe.name.toLowerCase().includes(entryUser) && recipe;
+                if (researchName){
+                    tabRecipes.push(researchName);
+                } 
 
-                    const researchName = recipes.name.toLowerCase().includes(entryUser) && recipes;
-                        
-                    if (researchName){
-                        return researchName;
-                    } 
-                    
-                    const researchDescription = recipes.description.toLowerCase().includes(entryUser) && recipes;
-                    
-                    if (researchDescription){
-                        return researchDescription;
+                const researchDescription = recipe.description.toLowerCase().includes(entryUser) && recipe;
+                if (researchDescription){
+                    tabRecipes.push(researchDescription);
+                }
+
+                let researchIngredient;
+                for (ingredients of recipe.ingredients){
+                    const ingredientLow = ingredients.ingredient.toLowerCase();
+                    if (ingredientLow.includes(entryUser)){
+                        researchIngredient = recipe;
                     }
+                }
 
-                    const researchIngredient = recipes.ingredients.map(value =>{
-                        const ingredientLow = value.ingredient.toLowerCase();
-                        if (ingredientLow.includes(entryUser)){
-                            return recipes;
-                        }
-                    }).filter(value => value);
-                    
-                    if (researchIngredient.length > 0){
-                        return researchIngredient[0];  
-                    }
+                if (typeof researchIngredient === 'object'){
+                    tabRecipes.push(researchIngredient);
+                }
 
-
-                }).filter(value => value);
+            }
 
             cleanAll();
             displayData(tabRecipes);
