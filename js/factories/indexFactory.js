@@ -1,4 +1,4 @@
-function indexFactory(){
+function indexFactory(recipes){
 
     function getCardRecipes(data){
         const article = document.createElement('article');
@@ -80,6 +80,98 @@ function indexFactory(){
 
             eltList.classList.add('tag');
             eltList.textContent = elt;
+
+            //si on click sur le tag
+            eltList.addEventListener('click', (e) => {
+              
+
+                const tagContentElt = document.querySelector('.tags-selected');
+                const research = e.target.textContent.toLowerCase();
+
+                
+                // on met les tags selectionné dans un tableau, puis on map pour ne garder que le text
+                let tagsSelected = [...document.querySelectorAll('.tags-selected div')];
+                tagsSelected = tagsSelected.map(value => value.textContent);
+                
+                
+                //si le tag existe déjà, on ne le creer pas
+                let tagCreation = true;
+                
+                for (text of tagsSelected){
+                    if (text === research){
+                        tagCreation = false;
+                    }
+                }
+                
+                if (!tagCreation){
+                    return;
+                }
+
+                const typeTag = e.target.closest('div').classList.value;
+
+                cleanAll();
+                
+                
+                //creation du tag
+                const tagElt = getTag(research, typeTag);
+                
+                tagContentElt.appendChild(tagElt);
+                
+                let tabRecipes;
+
+                //determine la catégorie du tag (ingredient, ustensile ou appareil)
+                if (typeTag === 'ingredients-container'){
+
+                    tabRecipes = recipes.map((recipe, index) => 
+                    {
+                        const researchIngredient = recipe.ingredients.map(value =>{
+                        const ingredientLow = value.ingredient.toLowerCase();
+                        if (ingredientLow.includes(research)){
+                            return recipe;
+                        }
+
+                    }).filter(value => value);
+
+                    if (researchIngredient.length > 0){
+                        return researchIngredient[0];
+                    }
+                
+                }).filter(value => value);
+
+                } else if (typeTag === 'appareils-container'){
+                    
+                    tabRecipes = recipes.map((recipe, index) => 
+                    {
+                        const researchAppliance = recipe.appliance.toLowerCase().includes(research) && recipe;
+                        
+                        if (researchAppliance){
+                            return researchAppliance;
+                        }
+                
+                    }).filter(value => value);
+
+                } else if (typeTag === 'ustensiles-container'){
+
+                    tabRecipes = recipes.map((recipe, index) => 
+                    {
+                        const researchUstensils = recipe.ustensils.map(value =>{
+                        const UstensilsLow = value.toLowerCase();
+                        if (UstensilsLow.includes(research)){
+                            return recipe;
+                        }
+                    }).filter(value => value);
+                
+                    if (researchUstensils.length > 0){
+                        return researchUstensils[0];
+                    }
+                
+                    }).filter(value => value);
+                }
+            
+                displayData(tabRecipes);
+
+            });
+
             listTags.appendChild(eltList);
         }
 
@@ -87,5 +179,36 @@ function indexFactory(){
 
     }
 
-    return { getCardRecipes, getTagList };
+    function getTag(name, type){
+        const tag = document.createElement('div');
+        const cross = document.createElement('i');
+
+        cross.classList.add('fa-regular', 'fa-circle-xmark');
+        cross.style.marginLeft = '10px';
+
+        if (type === 'ingredients-container'){
+            tag.style.backgroundColor = '#3282F7';
+        } else if (type === 'appareils-container'){
+            tag.style.backgroundColor = '#68D9A4';
+        } else if (type === 'ustensiles-container'){
+            tag.style.backgroundColor = '#ED6454';
+        }
+
+        //suppression du tag
+        cross.addEventListener('click', (e) => {
+            e.target.closest('div').remove();
+            cleanAll();
+
+            //on remet les anciens résultats via les datas instanciées précédemment
+            displayData(recipes);
+        });
+
+        tag.textContent = name;
+
+        tag.appendChild(cross);
+
+        return tag;
+    }
+
+    return { getCardRecipes, getTagList, getTag };
 }

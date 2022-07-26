@@ -10,14 +10,24 @@ async function fetchData(){
     }
 }
 
-function displayData(data, firstInitialization){
+function displayData(data){
+    
     const contentElt = document.querySelector('.content');
     const tagIngredientElt = document.querySelector('.ingredients-container');
     const tagAppareilsElt = document.querySelector('.appareils-container');
     const tagUstensilesElt = document.querySelector('.ustensiles-container');
 
+
+    if (data.length === 0) {
+        const nullResult = document.createElement('div');
+        nullResult.style.fontWeight = '800';
+        nullResult.textContent = 'Aucune recette ne correspond à vos critères';
+
+        contentElt.appendChild(nullResult);
+    }
+
     //construction des cards
-    const indexFactoryModel = indexFactory();
+    const indexFactoryModel = indexFactory(data);
     data.forEach(card => {
         const cardElt = indexFactoryModel.getCardRecipes(card);
         contentElt.appendChild(cardElt);
@@ -33,14 +43,14 @@ function displayData(data, firstInitialization){
     for (recipe of data){
         for (ingredient of recipe.ingredients){
             // on ajoute tous les ingredients
-            tabIngredient.push(ingredient.ingredient);
+            tabIngredient.push(ingredient.ingredient.toLowerCase());
         }
         for (ustensil of recipe.ustensils){
             // on ajoute tous les ustensiles
-            tabUstensiles.push(ustensil);
+            tabUstensiles.push(ustensil.toLowerCase());
         }
         // on ajoute tous les appareils
-        tabAppareils.push(recipe.appliance);
+        tabAppareils.push(recipe.appliance.toLowerCase());
     }
 
     //on enlève les doublons
@@ -66,8 +76,11 @@ function displayData(data, firstInitialization){
         const inputElt = tagIngredientElt.querySelector('input')
         inputElt.placeholder = "Rechercher un ingrédient";
         inputElt.style.width = '95%';
+
         const tagElt = tagIngredientElt.querySelector('.list-tags');
-        tagElt.style.display = 'flex';
+        if (tagElt){
+            tagElt.style.display = 'flex';
+        }
 
         
         if (!document.querySelector('.hidden-condition')){
@@ -83,7 +96,10 @@ function displayData(data, firstInitialization){
                 inputElt.placeholder = "Ingrédient";
                 inputElt.style.width = '170px';
     
-                document.querySelector('.ingredients-container ul').style.display = 'none';
+                const listElt = document.querySelector('.ingredients-container ul');
+                if (listElt){
+                    document.querySelector('.ingredients-container ul').style.display = 'none';
+                }
                 
                 document.querySelector('body').removeChild(hiddenCondition);
                 
@@ -185,7 +201,7 @@ function displayData(data, firstInitialization){
         }
     })
 
-    //recherche d'ingrédient
+    //recherche d'ustensiles
     const ustensilesSearchInputElt = tagUstensilesElt.querySelector('#ustensiles');
 
     ustensilesSearchInputElt.addEventListener('input', (e) => {
@@ -199,7 +215,6 @@ function displayData(data, firstInitialization){
         tagUstensilesElt.appendChild(newListElt);
     });
 
-
 }
 
 
@@ -210,9 +225,6 @@ function displayData(data, firstInitialization){
 function cleanAll(){
 
     const contentElt = document.querySelector('.content');
-    //const tagIngredientElt = document.querySelector('.ingredients-container');
-    //const tagAppareilsElt = document.querySelector('.appareils-container');
-    //const tagUstensilesElt = document.querySelector('.ustensiles-container');
 
     const tabFiltreElt = [document.querySelector('.ingredients-container'), document.querySelector('.appareils-container'), 
                         document.querySelector('.ustensiles-container')];
@@ -232,6 +244,12 @@ function cleanAll(){
         });
     });
 
+
+    const hiddenCondition = document.querySelector('.hidden-condition');
+    if (hiddenCondition){
+        document.querySelector('body').removeChild(hiddenCondition);
+    }
+
 }
 
 async function init() {
@@ -243,7 +261,8 @@ async function init() {
 
     formElt.addEventListener('submit', (e) => {
         e.preventDefault();
-    })
+    });
+
 
     searchBarElt.addEventListener('input',(e) => {
 
@@ -253,26 +272,29 @@ async function init() {
             tabRecipes = data.map((recipes, index) => 
                 {
 
+                    const researchName = recipes.name.toLowerCase().includes(entryUser) && recipes;
+                        
+                    if (researchName){
+                        return researchName;
+                    } 
+                    
+                    const researchDescription = recipes.description.toLowerCase().includes(entryUser) && recipes;
+                    
+                    if (researchDescription){
+                        return researchDescription;
+                    }
+
                     const researchIngredient = recipes.ingredients.map(value =>{
                         const ingredientLow = value.ingredient.toLowerCase();
                         if (ingredientLow.includes(entryUser)){
                             return recipes;
                         }
                     }).filter(value => value);
-
-                    const researchName = recipes.name.toLowerCase().includes(entryUser) && recipes;
-                        
-                    const researchDescription = recipes.description.toLowerCase().includes(entryUser) && recipes;
-
+                    
                     if (researchIngredient.length > 0){
-                        return researchIngredient[0];
-
-                    }else if (researchName){
-                        return researchName;
-
-                    } else if (researchDescription){
-                        return researchDescription;
+                        return researchIngredient[0];  
                     }
+
 
                 }).filter(value => value);
 
@@ -286,6 +308,7 @@ async function init() {
     });
 
     displayData(data);
+
 }
 
 document.addEventListener('DOMContentLoaded', init);

@@ -37,6 +37,22 @@ form{
     width: 50px;
     font-size: 25px;
 }
+
+
+.tags-selected{
+    display: flex;
+    margin-top: 20px;
+}
+.tags-selected div{
+    color: white;
+    margin-right: 5px;
+    padding: 5px 8px 5px 8px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+
 /* filter part */
 .search-filtres{
     margin-top: 20px;
@@ -112,6 +128,9 @@ form{
     color: white;
     margin: 5px;
     width: calc(33% - 9px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .tag:hover{
     font-weight: 600;
