@@ -254,47 +254,48 @@ function cleanAll(){
 
 async function init() {
     const data = await fetchData();
-    let tabRecipes;
-
+    
     const formElt = document.querySelector('.research');
     const searchBarElt = document.querySelector('#search-bar');
-
+    
     formElt.addEventListener('submit', (e) => {
         e.preventDefault();
     });
-
-
+    
+    
     searchBarElt.addEventListener('input',(e) => {
+        let tabRecipes = [];
 
         if (e.target.id === 'search-bar' && e.target.value.length > 2){
 
             const entryUser = e.target.value.toLowerCase();
-            let tabRecipes = [];
             
-            for (recipe of data){
-                
+            for (let recipe of data){
+
                 const researchName = recipe.name.toLowerCase().includes(entryUser) && recipe;
+                
                 if (researchName){
                     tabRecipes.push(researchName);
-                } 
+                }else{
+                    const researchDescription = recipe.description.toLowerCase().includes(entryUser) && recipe;
+                    if (researchDescription){
+                        tabRecipes.push(researchDescription);
+                    }else{
+                        let researchIngredient;
+                        for (let ingredients of recipe.ingredients){
+                            const ingredientLow = ingredients.ingredient.toLowerCase();
+                            if (ingredientLow.includes(entryUser)){
+                                researchIngredient = recipe;
+                            }
+                        }
 
-                const researchDescription = recipe.description.toLowerCase().includes(entryUser) && recipe;
-                if (researchDescription){
-                    tabRecipes.push(researchDescription);
-                }
-
-                let researchIngredient;
-                for (ingredients of recipe.ingredients){
-                    const ingredientLow = ingredients.ingredient.toLowerCase();
-                    if (ingredientLow.includes(entryUser)){
-                        researchIngredient = recipe;
+                        if (typeof researchIngredient === 'object'){
+                            tabRecipes.push(researchIngredient);
+                        }
                     }
-                }
 
-                if (typeof researchIngredient === 'object'){
-                    tabRecipes.push(researchIngredient);
                 }
-
+            
             }
 
             cleanAll();
