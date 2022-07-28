@@ -18,6 +18,7 @@ function displayData(data){
     const tagUstensilesElt = document.querySelector('.ustensiles-container');
 
 
+    //si aucune recette trouvée
     if (data.length === 0) {
         const nullResult = document.createElement('div');
         nullResult.style.fontWeight = '800';
@@ -39,7 +40,7 @@ function displayData(data){
     let tabIngredient = [];
     let tabAppareils = [];
     let tabUstensiles = [];
-
+    //on récupère les différents tags des recettes
     for (recipe of data){
         for (ingredient of recipe.ingredients){
             // on ajoute tous les ingredients
@@ -67,7 +68,7 @@ function displayData(data){
     tagUstensilesElt.appendChild(listUstensiles);
 
  
-    
+    //si on click sur l'input
     tagIngredientElt.addEventListener('click',(e) =>{
 
         tagIngredientElt.style.height = 'auto';
@@ -83,8 +84,8 @@ function displayData(data){
         }
 
         
+        //permet de sortir de l'event
         if (!document.querySelector('.hidden-condition')){
-            //permet de sortir de l'event
             const hiddenCondition = document.createElement('div');
             hiddenCondition.classList.add('hidden-condition');
             document.querySelector('body').appendChild(hiddenCondition);
@@ -135,8 +136,8 @@ function displayData(data){
         tagElt.style.display = 'flex';
 
         
+        //permet de sortir de l'event
         if (!document.querySelector('.hidden-condition')){
-            //permet de sortir de l'event
             const hiddenCondition = document.createElement('div');
             hiddenCondition.classList.add('hidden-condition');
             document.querySelector('body').appendChild(hiddenCondition);
