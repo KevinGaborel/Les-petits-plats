@@ -29,6 +29,7 @@ function indexFactory(recipes){
         const textDescribe = document.createElement('p');
 
         //creation et ajout des ingrédients
+
         data.ingredients.forEach((obj) => {
             const listElt = document.createElement('li');
             //listElt.textContent = obj.ingredient;
@@ -70,16 +71,21 @@ function indexFactory(recipes){
         return article;
     }
 
-    function getTagList(data){
+
+    //creer les listes des tags
+    function getTagList(tagList, recipes){
         
         const listTags = document.createElement('ul');
         listTags.classList.add('list-tags');
+        //on tri les tags
+        tagList.sort();
 
-        for (elt of data){
+        for (elt of tagList){
             const eltList = document.createElement('li');
 
             eltList.classList.add('tag');
             eltList.textContent = elt;
+
 
             //si on click sur le tag
             eltList.addEventListener('click', (e) => {
@@ -107,71 +113,25 @@ function indexFactory(recipes){
                     return;
                 }
 
-                const typeTag = e.target.closest('div').classList.value;
-
-                cleanAll();
-                
-                
+                let typeTag = e.target.closest('div').classList.value;
+                  
                 //creation du tag
                 const tagElt = getTag(research, typeTag);
                 
                 tagContentElt.appendChild(tagElt);
+
+                cleanAll();
+
+                const resultResearch = actualData.map(recipe => researchByOneTag(research, recipe, typeTag.split('s-')[0])).filter(recipe => recipe);
                 
-                let tabRecipes;
+                resultResearch.forEach(value => createCard(value));
 
-                //determine la catégorie du tag (ingredient, ustensile ou appareil)
-                if (typeTag === 'ingredients-container'){
+                displayTag(resultResearch);
 
-                    tabRecipes = recipes.map((recipe, index) => 
-                    {
-                        const researchIngredient = recipe.ingredients.map(value =>{
-                        const ingredientLow = value.ingredient.toLowerCase();
-                        if (ingredientLow.includes(research)){
-                            return recipe;
-                        }
-
-                    }).filter(value => value);
-
-                    if (researchIngredient.length > 0){
-                        return researchIngredient[0];
-                    }
-                
-                }).filter(value => value);
-
-                } else if (typeTag === 'appareils-container'){
-                    
-                    tabRecipes = recipes.map((recipe, index) => 
-                    {
-                        const researchAppliance = recipe.appliance.toLowerCase().includes(research) && recipe;
-                        
-                        if (researchAppliance){
-                            return researchAppliance;
-                        }
-                
-                    }).filter(value => value);
-
-                } else if (typeTag === 'ustensiles-container'){
-
-                    tabRecipes = recipes.map((recipe, index) => 
-                    {
-                        const researchUstensils = recipe.ustensils.map(value =>{
-                        const UstensilsLow = value.toLowerCase();
-                        if (UstensilsLow.includes(research)){
-                            return recipe;
-                        }
-                    }).filter(value => value);
-                
-                    if (researchUstensils.length > 0){
-                        return researchUstensils[0];
-                    }
-                
-                    }).filter(value => value);
-                }
-            
-                displayData(tabRecipes);
+                actualData = resultResearch;
 
             });
-
+            
             listTags.appendChild(eltList);
         }
 
@@ -179,28 +139,31 @@ function indexFactory(recipes){
 
     }
 
+    //creer le tag de la recherche en cours
     function getTag(name, type){
         const tag = document.createElement('div');
         const cross = document.createElement('i');
 
         cross.classList.add('fa-regular', 'fa-circle-xmark');
         cross.style.marginLeft = '10px';
+        cross.style.width = '16px';
+        cross.style.height = '16px';
 
         if (type === 'ingredients-container'){
-            tag.style.backgroundColor = '#3282F7';
+            tag.classList.add('ingredient');
         } else if (type === 'appareils-container'){
-            tag.style.backgroundColor = '#68D9A4';
+            tag.classList.add('appareil');
         } else if (type === 'ustensiles-container'){
-            tag.style.backgroundColor = '#ED6454';
+            tag.classList.add('ustensile');
         }
 
         //suppression du tag
         cross.addEventListener('click', (e) => {
             e.target.closest('div').remove();
-            cleanAll();
+            
+            const researchInput = document.querySelector('#search-bar').value.toLowerCase();
+            principalResearch(researchInput, dataOriginal);
 
-            //on remet les anciens résultats via les datas instanciées précédemment
-            displayData(recipes);
         });
 
         tag.textContent = name;

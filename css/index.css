@@ -115,6 +115,16 @@ form{
     background-color: #ED6454;
 }
 
+.ingredient{
+    background-color: #3282F7;
+}
+.appareil{
+    background-color: #68D9A4;
+}
+.ustensile{
+    background-color: #ED6454;
+}
+
 .list-tags{
     display: none;
     flex-wrap: wrap;
