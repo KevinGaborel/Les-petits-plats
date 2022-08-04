@@ -37,48 +37,41 @@ function principalResearch(e, data){
         //si la valeur entrée par l'utilisateur est supérieur à 2
         //on lance la recherche
         cleanAll();
-        let valideTags = [];
         
-        actualData = [];
-        
-        for (let recipe of data){
-
-            //si la recette passe le premier test
+        actualData = data.map(recipe => {
             let recipeIsValide;
-            const researchName = recipe.name.toLowerCase().includes(entryUser) && recipe;
+            //si la recette passe le premier test
+            const researchByName = recipe.name.toLowerCase().includes(entryUser) && recipe;
             
-            if (researchName){
-                valideTags.push(researchName);
+            if (researchByName){
                 recipeIsValide = true;
             }else{
-                const researchDescription = recipe.description.toLowerCase().includes(entryUser) && recipe;
+                const researchByDescription = recipe.description.toLowerCase().includes(entryUser) && recipe;
 
-                if (researchDescription){
-                    valideTags.push(researchDescription);
+                if (researchByDescription){
                     recipeIsValide = true;
                     
                 }else{
-                    let researchIngredient;
-                    for (let ingredients of recipe.ingredients){
+                    let researchByIngredient = recipe.ingredients.map(ingredients => {
                         const ingredientLow = ingredients.ingredient.toLowerCase();
                         if (ingredientLow.includes(entryUser)){
-                            researchIngredient = recipe;
+                            return recipe;
                         }
-                    }
+                    }).filter(value => value)
 
-                    if (typeof researchIngredient === 'object'){
-                        valideTags.push(researchIngredient);
+                    if (typeof researchByIngredient[0] === 'object'){
                         recipeIsValide = true;
                     }
                 }
 
             }
 
+
             //si je lance ou modifie la recherche principal alors que des tags sont présent
             if ((recipeIsValide && arrayIngredient.length > 0) || (recipeIsValide && arrayAppareil.length > 0) || (recipeIsValide && arrayUstensile.length > 0)){
         
                 let result = arrayIngredient.map(ingredient => researchByOneTag(ingredient, recipe, typeTags.ingredient)).filter(recipe => recipe);
-
+    
                 //si la recette match aussi avec les tags ingredients
                 if (result.length === arrayIngredient.length){
                     result = arrayAppareil.map(appareil => researchByOneTag(appareil, recipe, typeTags.appareil)).filter(recipe => recipe);
@@ -87,23 +80,29 @@ function principalResearch(e, data){
                         result = arrayUstensile.map(ustensile => researchByOneTag(ustensile, recipe, typeTags.ustensile)).filter(recipe => recipe);
                         //si match avec les tags ustensiles
                         if(result.length === arrayUstensile.length){
-                            actualData.push(recipe);
                             createCard(recipe);
+                            return recipe;
                         }
                     }
                 }
-
+    
                 //la recette est valide et aucun tags n'est présent
             } else if(recipeIsValide){
-                actualData.push(recipe);
+                console.log(recipe);
                 createCard(recipe);
+                return recipe;
             }
-        }
-        displayTag(valideTags);
-        if (valideTags.length === 0){
+        }).filter(value => value);
+
+        displayTag(actualData);
+    
+        if (actualData.length === 0){
             noResult();
         }
+
     }
+
+
     else if(nbTagsSelected > 0){
         //si la valeur de l'input est inférieur à 3 et qu'il y a des tags séléctionnées
         //recherche uniquement sur les tags
@@ -115,18 +114,14 @@ function principalResearch(e, data){
 
         for (let ingredient of arrayIngredient){
             actualData = actualData.map(recipe => researchByOneTag(ingredient, recipe, typeTags.ingredient)).filter(recipe => recipe);
-            console.log(actualData);
         }
         for (let appareil of arrayAppareil){
             actualData = actualData.map(recipe => researchByOneTag(appareil, recipe, typeTags.appareil)).filter(recipe => recipe);
-            console.log(actualData);
         }
         for (let ustensile of arrayUstensile){
             actualData = actualData.map(recipe => researchByOneTag(ustensile, recipe, typeTags.ustensile)).filter(recipe => recipe);
-            console.log(actualData);
         }
 
-        console.log(actualData);
         actualData.map(recipe => createCard(recipe));
 
     }
@@ -198,12 +193,15 @@ function createCard(data){
 }
 
 
+//permet d'aller chercher les tags des recettes présente dans le parametre data
 function displayTag(data){
 
     //tags
     let tabIngredient = [];
     let tabAppareils = [];
     let tabUstensiles = [];
+
+    console.log(data);
 
     //on récupère les différents tags des recettes
     for (recipe of data){
