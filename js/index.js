@@ -37,7 +37,6 @@ function principalResearch(e, data){
         //si la valeur entrée par l'utilisateur est supérieur à 2
         //on lance la recherche
         cleanAll();
-        let valideTags = [];
         
         actualData = [];
         
@@ -48,13 +47,11 @@ function principalResearch(e, data){
             const researchName = recipe.name.toLowerCase().includes(entryUser) && recipe;
             
             if (researchName){
-                valideTags.push(researchName);
                 recipeIsValide = true;
             }else{
                 const researchDescription = recipe.description.toLowerCase().includes(entryUser) && recipe;
 
                 if (researchDescription){
-                    valideTags.push(researchDescription);
                     recipeIsValide = true;
                     
                 }else{
@@ -67,7 +64,6 @@ function principalResearch(e, data){
                     }
 
                     if (typeof researchIngredient === 'object'){
-                        valideTags.push(researchIngredient);
                         recipeIsValide = true;
                     }
                 }
@@ -99,14 +95,14 @@ function principalResearch(e, data){
                 createCard(recipe);
             }
         }
-        displayTag(valideTags);
-        if (valideTags.length === 0){
+        displayTag(actualData);
+        if (actualData.length === 0){
             noResult();
         }
     }
     else if(nbTagsSelected > 0){
         //si la valeur de l'input est inférieur à 3 et qu'il y a des tags séléctionnées
-        //recherche uniquement sur les tags
+        //recherche uniquement sur les tags, quand un est supprimer
 
 
         cleanAll();
@@ -115,18 +111,14 @@ function principalResearch(e, data){
 
         for (let ingredient of arrayIngredient){
             actualData = actualData.map(recipe => researchByOneTag(ingredient, recipe, typeTags.ingredient)).filter(recipe => recipe);
-            console.log(actualData);
         }
         for (let appareil of arrayAppareil){
             actualData = actualData.map(recipe => researchByOneTag(appareil, recipe, typeTags.appareil)).filter(recipe => recipe);
-            console.log(actualData);
         }
         for (let ustensile of arrayUstensile){
             actualData = actualData.map(recipe => researchByOneTag(ustensile, recipe, typeTags.ustensile)).filter(recipe => recipe);
-            console.log(actualData);
         }
 
-        console.log(actualData);
         actualData.map(recipe => createCard(recipe));
 
     }
