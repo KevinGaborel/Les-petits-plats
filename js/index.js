@@ -44,26 +44,26 @@ function principalResearch(e, data){
 
             //si la recette passe le premier test
             let recipeIsValide;
-            const researchName = recipe.name.toLowerCase().includes(entryUser) && recipe;
+            const researchByName = recipe.name.toLowerCase().includes(entryUser) && recipe;
             
-            if (researchName){
+            if (researchByName){
                 recipeIsValide = true;
             }else{
-                const researchDescription = recipe.description.toLowerCase().includes(entryUser) && recipe;
+                const researchByDescription = recipe.description.toLowerCase().includes(entryUser) && recipe;
 
-                if (researchDescription){
+                if (researchByDescription){
                     recipeIsValide = true;
                     
                 }else{
-                    let researchIngredient;
+                    let researchByIngredient;
                     for (let ingredients of recipe.ingredients){
                         const ingredientLow = ingredients.ingredient.toLowerCase();
                         if (ingredientLow.includes(entryUser)){
-                            researchIngredient = recipe;
+                            researchByIngredient = recipe;
                         }
                     }
 
-                    if (typeof researchIngredient === 'object'){
+                    if (typeof researchByIngredient === 'object'){
                         recipeIsValide = true;
                     }
                 }
